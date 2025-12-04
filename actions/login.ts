@@ -1,4 +1,5 @@
 "use server";
+
 import * as z from 'zod';
 import { LoginSchema } from '@/scemas';
 import { signIn } from "@/auth";
@@ -11,44 +12,49 @@ import { SendVerificationEmail } from "@/lib/mail";
 export const login = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
     if (!validatedFields.success) {
-        return { error: 'Invalid fields!'};
+        return { error: 'Invalid fields!' };
     }
-    const { email,password } = validatedFields.data;
+
+    const { email, password } = validatedFields.data;
 
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
-        return { error: "Email is not registered" }
+        return { error: "Email is not registered" };
     }
 
+    // Email тексеру
     if (!existingUser.emailVerified) {
-        const verificationToken = await generateVerificationToken(
-            existingUser.email,
-        );
+        if (!existingUser.email) {
+            return { error: "User email is missing!" };
+        }
+
+        const verificationToken = await generateVerificationToken(existingUser.email);
+
         await SendVerificationEmail(
             verificationToken.email,
             verificationToken.token
-        )
-        return { success: "Email successfully sent!" };
+        );
+
+        return { success: "Verification email successfully sent!" };
     }
 
-    try{
-        await signIn("credentials",{
+    try {
+        await signIn("credentials", {
             email,
             password,
             redirectTo: DEFAULT_LOGIN_REDIRECT,
-        })
-    } catch(error) {
+        });
+        return { success: "Logged in successfully!" };
+    } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {
                 case "CredentialsSignin":
-                    return { error: "Invalid credentials!" }
+                    return { error: "Invalid credentials!" };
                 default:
-                    return { error: "Something went wrond!" }
+                    return { error: "Something went wrong!" };
             }
         }
         throw error;
-        
     }
-
 };
