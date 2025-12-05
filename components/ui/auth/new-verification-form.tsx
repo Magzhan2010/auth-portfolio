@@ -46,7 +46,11 @@ export const NewVerificationForm = ({ token }: NewVerificationFormProps) => {
       </CardContent>
 
       <CardFooter className="flex w-full items-center justify-center">
-        <Button type="button" variant="default" onClick={() => window.location.href = "/auth/login"}>
+        <Button
+          type="button"
+          variant="default"
+          onClick={() => (window.location.href = "/auth/login")}
+        >
           Back to login
         </Button>
       </CardFooter>
