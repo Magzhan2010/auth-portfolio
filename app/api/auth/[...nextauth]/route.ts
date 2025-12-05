@@ -1,10 +1,6 @@
+import { handlers } from "@/auth";
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
-    return NextResponse.json({ message: "GET works!" });
-}
-
-export async function POST(req: NextRequest) {
-    const body = await req.json();
-    return NextResponse.json({ message: "POST works!", data: body });
-}
+// App Router үшін NextAuth endpoint
+export const GET = handlers.GET;
+export const POST = handlers.POST;
