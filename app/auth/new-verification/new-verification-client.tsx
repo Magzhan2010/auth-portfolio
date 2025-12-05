@@ -11,11 +11,10 @@ export default function NewVerificationClient() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Тек клиентте рендер жасаймыз
     setReady(true);
   }, []);
 
   if (!ready) return null;
 
-  return <NewVerificationForm token={token || undefined} />;
+  return <NewVerificationForm token={token ?? null} />;
 }
