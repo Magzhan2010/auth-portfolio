@@ -10,6 +10,7 @@ import { getUserByEmail } from '@/data/user';
 import { SendVerificationEmail } from "@/lib/mail"; 
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
+    // 1️⃣ Validate input
     const validatedFields = LoginSchema.safeParse(values);
     if (!validatedFields.success) {
         return { error: 'Invalid fields!' };
@@ -17,13 +18,13 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
     const { email, password } = validatedFields.data;
 
+    // 2️⃣ Check if user exists
     const existingUser = await getUserByEmail(email);
-
     if (!existingUser) {
         return { error: "Email is not registered" };
     }
 
-    // Email тексеру
+    // 3️⃣ Email verification check
     if (!existingUser.emailVerified) {
         if (!existingUser.email) {
             return { error: "User email is missing!" };
@@ -39,6 +40,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         return { success: "Verification email successfully sent!" };
     }
 
+    // 4️⃣ Try signing in
     try {
         await signIn("credentials", {
             email,
