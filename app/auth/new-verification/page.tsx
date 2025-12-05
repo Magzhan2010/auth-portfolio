@@ -1,9 +1,11 @@
-import { NewVerificationForm } from "@/components/ui/auth/new-verification-form";
+import dynamic from "next/dynamic";
 
-export const NewVerificationPage = () => {
-    return (
-        <NewVerificationForm />
-    );
+// Client-only component
+const NewVerificationForm = dynamic(
+  () => import("@/components/ui/auth/new-verification-form"),
+  { ssr: false } // серверде рендерлемейді
+);
+
+export default function NewVerificationPage() {
+  return <NewVerificationForm />;
 }
-
-export default NewVerificationPage
