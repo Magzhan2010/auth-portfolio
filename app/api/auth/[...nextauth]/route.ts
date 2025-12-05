@@ -1,5 +1,10 @@
-import { handlers } from "@/auth";
+import { NextRequest, NextResponse } from 'next/server';
 
-// App Router үшін NextAuth endpoint
-export const GET = handlers;
-export const POST = handlers;
+export async function GET(req: NextRequest) {
+    return NextResponse.json({ message: "GET works!" });
+}
+
+export async function POST(req: NextRequest) {
+    const body = await req.json();
+    return NextResponse.json({ message: "POST works!", data: body });
+}
