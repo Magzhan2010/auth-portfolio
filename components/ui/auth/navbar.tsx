@@ -46,7 +46,7 @@ export const Navbar = () => {
                         e.preventDefault(); 
                         await handleSignOut(); 
                     }}>
-                        <Button type="submit" variant="ghost">
+                        <Button type="submit" onClick={handleSignOut} variant="ghost" >
                             Sign Out
                         </Button>
                     </form>
