@@ -1,7 +1,10 @@
-"use client";
-
-import { LoginForm } from "@/components/ui/auth/login-form";
+import { Suspense } from "react";
+import LoginPageClient from "./login-client";
 
 export default function LoginPage() {
-  return <LoginForm />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPageClient />
+    </Suspense>
+  );
 }
