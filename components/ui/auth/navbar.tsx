@@ -1,22 +1,31 @@
-"use client"; // <- міндетті түрде ең басында
+"use client"; 
 
-import { useRouter } from 'next/navigation';
+
 import { logoutUser } from "@/actions/logout"; 
 import { Poppins } from 'next/font/google';
 import { Button } from '@/registration/components/ui/button';
+import { useFormStatus } from 'react-dom';
 
 const font = Poppins({
     subsets: ["latin"],
     weight: ["600"]
 });
 
-export const Navbar = () => {
-    const router = useRouter();
+const SignOutButton = () => {
+  const { pending } = useFormStatus();
 
-    const handleSignOut = async () => {
-        await logoutUser(); 
-        router.push('/auth/login'); 
-    };
+  return (
+    <Button 
+      type="submit" 
+      variant="ghost" 
+      disabled={pending}
+    >
+      {pending ? 'Sign out...' : 'Sign Out'} 
+    </Button>
+  );
+};
+
+export const Navbar = () => {
     
     return (
         <nav className="py-5 border-b border-[#26292D] bg-[#171718] text-white">
@@ -42,14 +51,11 @@ export const Navbar = () => {
                             </a>
                         </li>
                     </ul>
-                    <form onSubmit={async (e) => {
-                        e.preventDefault(); 
-                        await handleSignOut(); 
-                    }}>
-                        <Button type="submit" onClick={handleSignOut} variant="ghost" >
-                            Sign Out
-                        </Button>
+                    
+                    <form action={logoutUser}>
+                        <SignOutButton />
                     </form>
+
                 </div>
             </div>
         </nav>
